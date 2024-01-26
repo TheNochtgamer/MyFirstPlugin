@@ -1,0 +1,11 @@
+org\myfirstplugin\myfirstplugin\MyUtils.class
+org\myfirstplugin\myfirstplugin\BowEvents.class
+org\myfirstplugin\myfirstplugin\AltarsEvents.class
+org\myfirstplugin\myfirstplugin\MyFirstPlugin.class
+org\myfirstplugin\myfirstplugin\BowController$ResurrectLoop.class
+org\myfirstplugin\myfirstplugin\BowController.class
+org\myfirstplugin\myfirstplugin\extra\Enums$UniqueEnchants.class
+org\myfirstplugin\myfirstplugin\FlechaEspecial.class
+org\myfirstplugin\myfirstplugin\BowEvents$1.class
+org\myfirstplugin\myfirstplugin\extra\Enums.class
+org\myfirstplugin\myfirstplugin\extra\Enums$SpecialItems.class
