@@ -28,7 +28,7 @@ public class MyUtils {
         return result.toString();
     }
 
-    static public boolean hasAirUp(Location location, int dy) {
+    public static boolean hasAirUp(Location location, int dy) {
         for (int i = 0; i < Math.abs(dy); i++) {
             Location ubicacionActual = location.clone().add(0, i * (dy < 0 ? -1 : 1), 0);
             BlockData blockData = ubicacionActual.getBlock().getBlockData();
@@ -41,7 +41,15 @@ public class MyUtils {
         return true;
     }
 
-    static public String vectorIntoString(Vector vector) {
+    public static String vectorIntoString(Vector vector) {
         return String.format("%.2f %.2f %.2f", vector.getX(), vector.getY(), vector.getZ());
+    }
+
+    public static double getRandomNumber(double min, double max) {
+        if (min > max) {
+            throw new IllegalArgumentException("El valor mínimo no puede ser mayor que el valor máximo.");
+        }
+
+        return min + Math.random() * (max - min);
     }
 }

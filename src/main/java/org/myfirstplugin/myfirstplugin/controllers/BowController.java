@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin;
+package org.myfirstplugin.myfirstplugin.controllers;
 
 import com.destroystokyo.paper.event.player.PlayerReadyArrowEvent;
 import org.bukkit.Location;
@@ -13,6 +13,8 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.myfirstplugin.myfirstplugin.MyFirstPlugin;
+import org.myfirstplugin.myfirstplugin.MyUtils;
 import org.myfirstplugin.myfirstplugin.extra.Enums;
 
 import java.util.ArrayList;
@@ -64,11 +66,41 @@ public class BowController {
         }, 50);
     }
 
-    class ResurrectLoop implements Runnable {
+
+    public void resurrectCharge(PlayerReadyArrowEvent event) {
+        for (ResurrectLoop myLoop : resurrectLoops) {
+            if (myLoop.checkIfTheSamePlayer(event.getPlayer()))
+                return;
+        }
+
+        BukkitScheduler scheduler = main.getServer().getScheduler();
+
+        ResurrectLoop resurrectLoop = new ResurrectLoop(event);
+        resurrectLoops.add(resurrectLoop);
+        BukkitTask task = scheduler.runTaskTimer(main, resurrectLoop, 10, 4);
+        resurrectLoop.setTask(task);
+    }
+
+    public void resurrectShot(EntityShootBowEvent event) {
+        for (ResurrectLoop myLoop : resurrectLoops) {
+            if (!myLoop.checkIfTheSamePlayer((Player) event.getEntity()))
+                continue;
+
+            myLoop.shoot(event);
+
+            return;
+        }
+
+    }
+
+
+    private class ResurrectLoop implements Runnable {
+        //
         private final int totalLoopsForNewArrow = 5;
+        //
         private int loopsForNewArrow = 0;
         private boolean isClosed = false;
-        private boolean gotShooted = false;
+        private boolean gotShot = false;
         private BukkitTask task;
         private PlayerReadyArrowEvent event;
         private BukkitScheduler scheduler = main.getServer().getScheduler();
@@ -87,7 +119,7 @@ public class BowController {
 //            event.getEntity().sendMessage("Shoot");
             Projectile projectile = (Projectile) event.getProjectile();
 
-            this.gotShooted = true;
+            this.gotShot = true;
             stopMe();
 
             for (Arrow arrow : shootingArrows) {
@@ -183,17 +215,17 @@ public class BowController {
             }
         }
 
-        private Projectile spawnArrow(Player player, Vector offset) {
-            Location location = player.getEyeLocation();
-            Vector direction = location.getDirection();
-
-            return player.getWorld().spawnArrow(
-                    location.add(offset),
-                    direction,
-                    0,
-                    3.0f
-            );
-        }
+//        private Projectile spawnArrow(Player player, Vector offset) {
+//            Location location = player.getEyeLocation();
+//            Vector direction = location.getDirection();
+//
+//            return player.getWorld().spawnArrow(
+//                    location.add(offset),
+//                    direction,
+//                    0,
+//                    3.0f
+//            );
+//        }
 
         private boolean checkIfStillDrawing() {
             PlayerInventory inv = event.getPlayer().getInventory();
@@ -214,7 +246,7 @@ public class BowController {
             scheduler.cancelTask(task.getTaskId());
             resurrectLoops.remove(this);
 
-            if (!this.gotShooted && !this.shootingArrows.isEmpty()) {
+            if (!this.gotShot && !this.shootingArrows.isEmpty()) {
                 player.getWorld().playSound(player.getEyeLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.0f, 1.9f);
 
                 for (Entity arrow : this.shootingArrows) {
@@ -226,37 +258,4 @@ public class BowController {
         }
 
     }
-
-    public void resurrectCharge(PlayerReadyArrowEvent event) {
-        for (ResurrectLoop myLoop : resurrectLoops) {
-            if (myLoop.checkIfTheSamePlayer(event.getPlayer()))
-                return;
-        }
-
-        BukkitScheduler scheduler = main.getServer().getScheduler();
-
-        ResurrectLoop resurrectLoop = new ResurrectLoop(event);
-        resurrectLoops.add(resurrectLoop);
-        BukkitTask task = scheduler.runTaskTimer(main, resurrectLoop, 10, 4);
-        resurrectLoop.setTask(task);
-    }
-
-    public void resurrectShot(EntityShootBowEvent event) {
-        for (ResurrectLoop myLoop : resurrectLoops) {
-            if (!myLoop.checkIfTheSamePlayer((Player) event.getEntity()))
-                continue;
-
-            myLoop.shoot(event);
-
-            return;
-        }
-
-    }
-
-//    public void resurrectStopCharge(PlayerStopUsingItemEvent event) {
-//        for (ResurrectLoop loop : resurrectLoops) {
-//            if (loop.checkIfTheSamePlayer(event.getPlayer())) return;
-//        }
-//    }
-
 }

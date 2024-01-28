@@ -9,18 +9,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.myfirstplugin.myfirstplugin.controllers.BowController;
 import org.myfirstplugin.myfirstplugin.extra.Enums;
 
 import java.util.ArrayList;
 
 public class BowEvents implements Listener {
-    private MyFirstPlugin main;
     private final ArrayList<FlechaEspecial> flechasEspeciales;
-    private final BowController bowController;
+    private final BowController controller;
 
     public BowEvents(MyFirstPlugin main) {
-        this.main = main;
-        this.bowController = new BowController(main);
+        this.controller = new BowController(main);
         this.flechasEspeciales = new ArrayList<>();
     }
 
@@ -44,7 +43,7 @@ public class BowEvents implements Listener {
 
             switch (fE.getType()) {
                 case ANVIL:
-                    bowController.anvilArrow((ProjectileHitEvent) event);
+                    controller.anvilArrow((ProjectileHitEvent) event);
                     break;
             }
 
@@ -60,7 +59,7 @@ public class BowEvents implements Listener {
         if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.Anvil.Name()))
             this.flechasEspeciales.add(new FlechaEspecial(event.getProjectile(), Enums.SpecialItems.ANVIL));
         if (event.getEntity() instanceof Player && event.getBow().lore().toString().contains(Enums.UniqueEnchants.Resurrect.Name()))
-            bowController.resurrectShot(event);
+            controller.resurrectShot(event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -73,10 +72,11 @@ public class BowEvents implements Listener {
     public void onPlayerReadyArrow(PlayerReadyArrowEvent event) {
         if (event.getBow().lore() == null) return;
 
+
 //        event.getPlayer().sendMessage("BowTick");
 
         if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.Resurrect.Name()))
-            bowController.resurrectCharge(event);
+            controller.resurrectCharge(event);
 
     }
 
