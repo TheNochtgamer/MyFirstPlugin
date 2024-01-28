@@ -1,7 +1,0 @@
-name: myfirstplugin
-version: '1.0-SNAPSHOT'
-main: org.myfirstplugin.myfirstplugin.MyFirstPlugin
-api-version: '1.20'
-load: STARTUP
-authors: [ TheNochtgamer ]
-description: My first mc plugin

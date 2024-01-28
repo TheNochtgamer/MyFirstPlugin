@@ -2,8 +2,6 @@ package org.myfirstplugin.myfirstplugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Logger;
-
 public final class MyFirstPlugin extends JavaPlugin {
 
     @Override
