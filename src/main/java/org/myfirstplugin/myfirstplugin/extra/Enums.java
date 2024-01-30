@@ -4,12 +4,13 @@ import org.bukkit.Material;
 
 public class Enums {
     public enum SpecialItems {
-        ANVIL, RESURRECT
+        ANVIL, RESURRECT, SNIPER
     }
 
     public enum UniqueEnchants {
-        Anvil("Anvil Fall"),
-        Resurrect("Resurrect");
+        ANVIL("Anvil Fall"),
+        RESURRECT("Resurrect"),
+        SNIPER("Sniper");
 
         //
         private final String name;

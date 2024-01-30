@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin.controllers;
+package org.myfirstplugin.myfirstplugin.interfaces;
 
 import com.destroystokyo.paper.event.player.PlayerReadyArrowEvent;
 import org.bukkit.Location;
@@ -6,96 +6,34 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.myfirstplugin.myfirstplugin.MyFirstPlugin;
-import org.myfirstplugin.myfirstplugin.MyUtils;
 import org.myfirstplugin.myfirstplugin.extra.Enums;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class BowController {
+public abstract class ResurrectEnchant extends MyEnchant {
+    protected final ArrayList<ResurrectLoop> resurrectLoops = new ArrayList<>();
 
-    private final MyFirstPlugin main;
-    private final ArrayList<ResurrectLoop> resurrectLoops = new ArrayList<>();
-
-    public BowController(@NotNull MyFirstPlugin main) {
-        this.main = main;
+    public ResurrectEnchant(MyFirstPlugin main) {
+        super(main);
     }
 
-    public void anvilArrow(ProjectileHitEvent event) {
-        Location location = event.getHitEntity() == null ? event.getHitBlock().getLocation() : event.getHitEntity().getLocation();
-        event.setCancelled(true);
-        event.getEntity().remove();
-
-//        this.main.getLogger().info(String.format("Special Arrow HIT (%.2f, %.2f, %.2f)", location.x(), location.y(), location.z()));
-
-        if (!MyUtils.hasAirUp(location.clone().add(new Vector(0, 1, 0)), 19)) return;
-
-        Location fallingLocation = location.clone();
-
-        fallingLocation.set(((int) location.x()) + 0.5, ((int) location.y()) + 20, ((int) location.z()) + 0.5);
-
-        FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(fallingLocation, Material.DAMAGED_ANVIL.createBlockData());
-        fallingBlock.setMaxDamage(40);
-        fallingBlock.setDamagePerBlock(3);
-        fallingBlock.setFallDistance(0);
-        fallingBlock.setCancelDrop(true);
-        fallingBlock.setHurtEntities(true);
-
-        fallingBlock.setVelocity(new Vector(0, -2, 0));
-
-        BukkitScheduler scheduler = main.getServer().getScheduler();
-        scheduler.runTaskLater(main, () -> {
-            Location anvilLocation = fallingLocation.clone().subtract(new Vector(0, 19, 0));
-
-            for (int i = 20; i > 0; i--) {
-                Location actualLocation = anvilLocation.clone().subtract(0, i, 0);
-
-                if (actualLocation.getWorld().getBlockAt(actualLocation).getBlockData().getMaterial() != Material.DAMAGED_ANVIL)
-                    continue;
-                actualLocation.getBlock().setType(Material.AIR);
-            }
-
-        }, 50);
-    }
-
-
-    public void resurrectCharge(PlayerReadyArrowEvent event) {
+    @Nullable
+    protected ResurrectLoop findMyLoop(Player player) {
         for (ResurrectLoop myLoop : resurrectLoops) {
-            if (myLoop.checkIfTheSamePlayer(event.getPlayer()))
-                return;
+            if (myLoop.checkIfTheSamePlayer(player)) return myLoop;
         }
-
-        BukkitScheduler scheduler = main.getServer().getScheduler();
-
-        ResurrectLoop resurrectLoop = new ResurrectLoop(event);
-        resurrectLoops.add(resurrectLoop);
-        BukkitTask task = scheduler.runTaskTimer(main, resurrectLoop, 10, 4);
-        resurrectLoop.setTask(task);
+        return null;
     }
 
-    public void resurrectShot(EntityShootBowEvent event) {
-        for (ResurrectLoop myLoop : resurrectLoops) {
-            if (!myLoop.checkIfTheSamePlayer((Player) event.getEntity()))
-                continue;
-
-            myLoop.shoot(event);
-
-            return;
-        }
-
-    }
-
-
-    private class ResurrectLoop implements Runnable {
-        //
+    protected class ResurrectLoop implements Runnable {
         private final int totalLoopsForNewArrow = 5;
         //
         private int loopsForNewArrow = 0;
@@ -136,6 +74,19 @@ public class BowController {
             if (!this.event.getPlayer().equals(player)) return false;
 
             this.isClosed = true;
+            return true;
+        }
+
+        public boolean checkIfStillDrawing() {
+            PlayerInventory inv = event.getPlayer().getInventory();
+
+            ItemStack holding = (inv.getItemInMainHand().getType() == Material.BOW || inv.getItemInMainHand().getType() == Material.CROSSBOW) ? inv.getItemInMainHand() : inv.getItemInOffHand();
+            if (
+                    (holding.getType() != Material.BOW && holding.getType() != Material.CROSSBOW) ||
+                            holding.lore() == null ||
+                            !holding.lore().toString().contains(Enums.UniqueEnchants.RESURRECT.Name())
+            )
+                return false;
             return true;
         }
 
@@ -226,19 +177,6 @@ public class BowController {
 //                    3.0f
 //            );
 //        }
-
-        private boolean checkIfStillDrawing() {
-            PlayerInventory inv = event.getPlayer().getInventory();
-
-            ItemStack holding = (inv.getItemInMainHand().getType() == Material.BOW || inv.getItemInMainHand().getType() == Material.CROSSBOW) ? inv.getItemInMainHand() : inv.getItemInOffHand();
-            if (
-                    (holding.getType() != Material.BOW && holding.getType() != Material.CROSSBOW) ||
-                            holding.lore() == null ||
-                            !holding.lore().toString().contains(Enums.UniqueEnchants.Resurrect.Name())
-            )
-                return false;
-            return true;
-        }
 
         private void stopMe() {
             Player player = this.event.getPlayer();
