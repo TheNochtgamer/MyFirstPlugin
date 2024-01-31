@@ -8,10 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.myfirstplugin.myfirstplugin.controllers.AnvilEnchantHit;
-import org.myfirstplugin.myfirstplugin.controllers.AnvilEnchantShot;
-import org.myfirstplugin.myfirstplugin.controllers.ResurrectCharge;
-import org.myfirstplugin.myfirstplugin.controllers.ResurrectShot;
+import org.myfirstplugin.myfirstplugin.controllers.*;
 import org.myfirstplugin.myfirstplugin.extra.Enums;
 
 public class BowEvents implements Listener {
@@ -31,6 +28,8 @@ public class BowEvents implements Listener {
             new AnvilEnchantShot(main, event).run();
         if (event.getEntity() instanceof Player && event.getBow().lore().toString().contains(Enums.UniqueEnchants.RESURRECT.Name()))
             new ResurrectShot(main, event).run();
+        if (event.getEntity() instanceof Player && event.getBow().lore().toString().contains(Enums.UniqueEnchants.SNIPER.Name()))
+            new SniperShot(main, event).run();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -43,13 +42,13 @@ public class BowEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerReadyArrow(PlayerReadyArrowEvent event) {
         if (event.getBow().lore() == null) return;
-
+//        assert event.getBow().lore() != null;
 
 //        event.getPlayer().sendMessage("BowTick");
-
         if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.RESURRECT.Name()))
             new ResurrectCharge(main, event).run();
-
+        if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.SNIPER.Name()))
+            new SniperCharge(main, event).run();
     }
 
 //    @EventHandler
