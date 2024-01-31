@@ -2,7 +2,7 @@ package org.myfirstplugin.myfirstplugin.controllers;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -21,10 +21,10 @@ public class AnvilEnchantHit extends AnvilEnchant {
     }
 
     public void run() {
-        Arrow arrow = (Arrow) event.getEntity();
+        Entity arrow = event.getEntity();
         Location location = event.getHitEntity() == null ? event.getHitBlock().getLocation() : event.getHitEntity().getLocation();
 
-        if (findMyArrow(arrow) == null) return;
+        if (findMyArrowAndDel(arrow) == null) return;
 
         event.setCancelled(true);
         arrow.remove();

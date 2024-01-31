@@ -18,6 +18,6 @@ public class AnvilEnchantShot extends AnvilEnchant {
     public void run() {
         if (event.getProjectile().getType() != EntityType.ARROW) return;
 
-        this.arrows.add((Arrow) event.getProjectile());
+        addArrow(event.getProjectile());
     }
 }

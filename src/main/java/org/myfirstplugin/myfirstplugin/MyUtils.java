@@ -1,11 +1,16 @@
 package org.myfirstplugin.myfirstplugin;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class MyUtils {
@@ -51,5 +56,20 @@ public class MyUtils {
         }
 
         return min + Math.random() * (max - min);
+    }
+
+    public static void showTitle(@NotNull Player player,
+                                 @Nullable String title,
+                                 @Nullable String subTitle,
+                                 int fadeInSec,
+                                 int staySec,
+                                 int fadeOutSec) {
+        if (title == null) title = "";
+        if (subTitle == null) subTitle = "";
+
+        player.showTitle(Title.title(Component.text(title),
+                Component.text(subTitle),
+                Title.Times.times(Duration.ofSeconds(fadeInSec), Duration.ofSeconds(staySec), Duration.ofSeconds(fadeOutSec))));
+
     }
 }

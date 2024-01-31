@@ -3,9 +3,6 @@ package org.myfirstplugin.myfirstplugin.extra;
 import org.bukkit.Material;
 
 public class Enums {
-    public enum SpecialItems {
-        ANVIL, RESURRECT, SNIPER
-    }
 
     public enum UniqueEnchants {
         ANVIL("Anvil Fall"),

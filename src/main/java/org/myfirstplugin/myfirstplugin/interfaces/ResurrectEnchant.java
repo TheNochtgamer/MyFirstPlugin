@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class ResurrectEnchant extends MyEnchant {
-    protected final ArrayList<ResurrectLoop> resurrectLoops = new ArrayList<>();
+    protected static final ArrayList<ResurrectLoop> resurrectLoops = new ArrayList<>();
 
     public ResurrectEnchant(MyFirstPlugin main) {
         super(main);
@@ -38,7 +38,7 @@ public abstract class ResurrectEnchant extends MyEnchant {
         //
         private int loopsForNewArrow = 0;
         private boolean isClosed = false;
-        private boolean gotShot = false;
+        private boolean gotShooted = false;
         private BukkitTask task;
         private PlayerReadyArrowEvent event;
         private BukkitScheduler scheduler = main.getServer().getScheduler();
@@ -57,7 +57,7 @@ public abstract class ResurrectEnchant extends MyEnchant {
 //            event.getEntity().sendMessage("Shoot");
             Projectile projectile = (Projectile) event.getProjectile();
 
-            this.gotShot = true;
+            this.gotShooted = true;
             stopMe();
 
             for (Arrow arrow : shootingArrows) {
@@ -184,7 +184,7 @@ public abstract class ResurrectEnchant extends MyEnchant {
             scheduler.cancelTask(task.getTaskId());
             resurrectLoops.remove(this);
 
-            if (!this.gotShot && !this.shootingArrows.isEmpty()) {
+            if (!this.gotShooted && !this.shootingArrows.isEmpty()) {
                 player.getWorld().playSound(player.getEyeLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE, 1.0f, 1.9f);
 
                 for (Entity arrow : this.shootingArrows) {
