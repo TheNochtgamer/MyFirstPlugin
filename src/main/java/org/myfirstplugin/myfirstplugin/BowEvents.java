@@ -8,7 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.myfirstplugin.myfirstplugin.controllers.*;
+import org.bukkit.inventory.ItemStack;
+import org.myfirstplugin.myfirstplugin.controllers.enchants.*;
 import org.myfirstplugin.myfirstplugin.extra.Enums;
 
 public class BowEvents implements Listener {
@@ -22,13 +23,19 @@ public class BowEvents implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityShootBow(EntityShootBowEvent event) {
 //        if (event.getEntity().getType() != EntityType.PLAYER) return;
-        if (event.getBow() == null || event.getBow().lore() == null) return;
+        ItemStack bow = event.getBow();
+        if (bow == null || event.getBow().lore() == null) return;
 
-        if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.ANVIL.Name()))
-            new AnvilEnchantShot(main, event).run();
-        if (event.getEntity() instanceof Player && event.getBow().lore().toString().contains(Enums.UniqueEnchants.RESURRECT.Name()))
+        if (MyUtils.hasLore(bow, Enums.UniqueEnchants.ANVIL.Name()))
+            new AnvilFallShot(main, event).run();
+        if (MyUtils.hasLore(bow, Enums.UniqueEnchants.INSTANTANEOUS.Name()))
+            new InstantaneousEnchant(main, event).run();
+
+        if (!(event.getEntity() instanceof Player)) return;
+
+        if (MyUtils.hasLore(bow, Enums.UniqueEnchants.RESURRECT.Name()))
             new ResurrectShot(main, event).run();
-        if (event.getEntity() instanceof Player && event.getBow().lore().toString().contains(Enums.UniqueEnchants.SNIPER.Name()))
+        if (MyUtils.hasLore(bow, Enums.UniqueEnchants.SNIPER.Name()))
             new SniperShot(main, event).run();
     }
 
@@ -36,27 +43,19 @@ public class BowEvents implements Listener {
     public void onProjectileHit(ProjectileHitEvent event) {
 
         if (event.getEntity().getType() == EntityType.ARROW)
-            new AnvilEnchantHit(main, event).run();
+            new AnvilFallHit(main, event).run();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerReadyArrow(PlayerReadyArrowEvent event) {
+        ItemStack bow = event.getBow();
         if (event.getBow().lore() == null) return;
 //        assert event.getBow().lore() != null;
 
 //        event.getPlayer().sendMessage("BowTick");
-        if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.RESURRECT.Name()))
+        if (MyUtils.hasLore(bow, Enums.UniqueEnchants.RESURRECT.Name()))
             new ResurrectCharge(main, event).run();
-        if (event.getBow().lore().toString().contains(Enums.UniqueEnchants.SNIPER.Name()))
+        if (MyUtils.hasLore(bow, Enums.UniqueEnchants.SNIPER.Name()))
             new SniperCharge(main, event).run();
     }
-
-//    @EventHandler
-//    public void onPlayerItemHeldEvent(PlayerItemHeldEvent event) {
-//        if (event.getItem().lore() == null) return;
-//
-//        main.getLogger().warning(event.getItem().toString());
-//        if (event.getItem().lore().toString().contains(BowEnchants.Resurrect.Name()))
-//            bowController.resurrectStopCharge(event);
-//    }
 }

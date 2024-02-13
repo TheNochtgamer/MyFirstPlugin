@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin.controllers;
+package org.myfirstplugin.myfirstplugin.controllers.enchants;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;

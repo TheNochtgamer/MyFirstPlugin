@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin.controllers;
+package org.myfirstplugin.myfirstplugin.controllers.altars;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;

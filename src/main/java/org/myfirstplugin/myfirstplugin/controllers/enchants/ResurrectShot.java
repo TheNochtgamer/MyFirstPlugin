@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin.controllers;
+package org.myfirstplugin.myfirstplugin.controllers.enchants;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -16,7 +16,7 @@ public class ResurrectShot extends ResurrectEnchant {
     public void run() {
         ResurrectLoop myLoop = findMyLoop((Player) event.getEntity());
         if (myLoop == null) return;
-        
+
         myLoop.shoot(event);
     }
 }

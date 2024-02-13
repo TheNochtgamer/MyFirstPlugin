@@ -7,8 +7,8 @@ public class Enums {
     public enum UniqueEnchants {
         ANVIL("Anvil Fall"),
         RESURRECT("Resurrect"),
-        SNIPER("Sniper");
-
+        SNIPER("Sniper"),
+        INSTANTANEOUS("Instantaneous");
         //
         private final String name;
 

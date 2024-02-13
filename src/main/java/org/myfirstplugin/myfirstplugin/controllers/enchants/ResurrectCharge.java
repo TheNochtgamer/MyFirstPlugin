@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin.controllers;
+package org.myfirstplugin.myfirstplugin.controllers.enchants;
 
 import com.destroystokyo.paper.event.player.PlayerReadyArrowEvent;
 import org.bukkit.scheduler.BukkitScheduler;

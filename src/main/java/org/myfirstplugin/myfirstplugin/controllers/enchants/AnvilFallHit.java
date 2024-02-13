@@ -1,4 +1,4 @@
-package org.myfirstplugin.myfirstplugin.controllers;
+package org.myfirstplugin.myfirstplugin.controllers.enchants;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,11 +11,11 @@ import org.myfirstplugin.myfirstplugin.MyFirstPlugin;
 import org.myfirstplugin.myfirstplugin.MyUtils;
 import org.myfirstplugin.myfirstplugin.interfaces.AnvilEnchant;
 
-public class AnvilEnchantHit extends AnvilEnchant {
+public class AnvilFallHit extends AnvilEnchant {
 
     private ProjectileHitEvent event;
 
-    public AnvilEnchantHit(MyFirstPlugin main, ProjectileHitEvent event) {
+    public AnvilFallHit(MyFirstPlugin main, ProjectileHitEvent event) {
         super(main);
         this.event = event;
     }

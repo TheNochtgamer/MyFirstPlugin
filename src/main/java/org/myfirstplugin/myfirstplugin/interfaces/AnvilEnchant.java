@@ -13,7 +13,7 @@ public abstract class AnvilEnchant extends MyEnchant {
         super(main);
     }
 
-    protected void addArrow(Entity arrow) {
+    public void addArrow(Entity arrow) {
         arrows.add(arrow);
     }
 

@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.myfirstplugin.myfirstplugin.controllers.AltarsController;
+import org.myfirstplugin.myfirstplugin.controllers.altars.AltarsController;
 import org.myfirstplugin.myfirstplugin.extra.Enums;
 
 import java.util.Arrays;
