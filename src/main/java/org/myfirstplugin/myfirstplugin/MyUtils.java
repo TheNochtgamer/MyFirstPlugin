@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,5 +72,11 @@ public class MyUtils {
                 Component.text(subTitle),
                 Title.Times.times(Duration.ofSeconds(fadeInSec), Duration.ofSeconds(staySec), Duration.ofSeconds(fadeOutSec))));
 
+    }
+
+    public static boolean hasLore(ItemStack item, String lore) {
+        if (item.lore() == null) return false;
+        if (!item.lore().toString().contains(lore)) return false;
+        return true;
     }
 }
