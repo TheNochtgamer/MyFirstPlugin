@@ -1,5 +1,6 @@
 # Mi primer plugin
 
-> Proyecto de maven creado para **Paper 1.20.1**
+> Proyecto de java creado para **Paper 1.20.1**
 
-Probando distintos eventListeners y de metodos que ofrece Paper-Spigot
+- Utilizando maven y ant
+- Probando distintos eventListeners y de metodos que ofrece Paper-Spigot
